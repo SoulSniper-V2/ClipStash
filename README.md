@@ -32,7 +32,7 @@ Built for developers and power users who copy dozens of things a day and lose ha
 - **One-click re-copy** — Click any clip to copy it back to your clipboard
 - **Pin important clips** — Pin clips to keep them at the top permanently
 - **Privacy-first** — Default blocklist for password managers (1Password, LastPass, Bitwarden, Dashlane, KeePassXC, Keychain Access)
-- **AI-ready** — Stubbed integration with [`llm`](https://llm.datasette.io/) CLI for semantic search & summaries (V2)
+- **AI-powered** — Native on-device semantic search using Apple's `NLEmbedding` framework
 - **No Dock icon** — Pure menu bar app. Zero visual noise.
 
 ## 🏗 Architecture
@@ -56,9 +56,9 @@ Built for developers and power users who copy dozens of things a day and lose ha
                                │ shell out
                                ▼
                     ┌─────────────────────┐
-                    │     llm CLI (V2)     │
-                    │  OpenAI · Anthropic  │
-                    │  Gemini · Ollama     │
+                    │ Apple NLEmbedding   │
+                    │ (Local Semantic     │
+                    │      Search)        │
                     └─────────────────────┘
 ```
 
@@ -120,7 +120,7 @@ Sources/
 ├── Services/
 │   ├── ClipboardWatcher.swift       # NSPasteboard polling + blocklist
 │   ├── HotkeyManager.swift          # Global ⌥V hotkey
-│   └── LLMService.swift             # AI integration stub (V2)
+│   ├── EmbeddingService.swift       # Apple NLEmbedding integration
 ├── Views/
 │   ├── PopoverContentView.swift     # Main popover container
 │   ├── ClipListView.swift           # Scrollable clip list
@@ -152,9 +152,7 @@ All data is stored locally in `~/Library/Application Support/ClipStash/history.d
 ## 🗺 Roadmap
 
 ### V2 — AI Layer
-- [ ] Semantic search via `llm embed` (natural language queries like *"that SQL query from last week"*)
-- [ ] AI-generated one-line summaries for long clips
-- [ ] Auto-tagging: `code`, `url`, `address`, `phone`, etc.
+- [x] Native on-device semantic search via Apple's `NLEmbedding`
 - [ ] Smart collections / filtered views
 
 ### V3 — Power Features
@@ -169,7 +167,6 @@ All data is stored locally in `~/Library/Application Support/ClipStash/history.d
 | Package | Purpose |
 |---|---|
 | [GRDB.swift](https://github.com/groue/GRDB.swift) | Type-safe SQLite with `ValueObservation` for live UI updates |
-| [`llm` CLI](https://llm.datasette.io/) | AI operations — model-agnostic (OpenAI, Anthropic, Gemini, Ollama) — *V2, optional* |
 
 ## 📄 License
 
