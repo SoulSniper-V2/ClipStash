@@ -31,7 +31,7 @@ Built for developers and power users who copy dozens of things a day and lose ha
 - **Source app tracking** — See which app each clip came from, with the app's icon
 - **One-click re-copy** — Click any clip to copy it back to your clipboard
 - **Pin important clips** — Pin clips to keep them at the top permanently
-- **Privacy-first** — Default blocklist for password managers (1Password, LastPass, Bitwarden, Dashlane, KeePassXC, Keychain Access)
+- **Privacy Controls** — Configurable capturing from password managers (1Password, LastPass, Bitwarden, Dashlane, KeePassXC, Keychain Access)
 - **AI-powered** — Native on-device semantic search using Apple's `NLEmbedding` framework
 - **No Dock icon** — Pure menu bar app. Zero visual noise.
 
@@ -137,7 +137,7 @@ Sources/
 
 ## 🔒 Privacy
 
-ClipStash **never** captures clipboard content from password managers or sensitive apps. The following apps are blocked by default:
+By default, ClipStash captures content identically from all applications. However, if you'd like to disable capturing from password managers, you can easily toggle this off in the Settings. When disabled, the following apps are actively ignored:
 
 - 1Password (`com.1password.1password`, `com.agilebits.onepassword7`)
 - LastPass (`com.lastpass.LastPass`)

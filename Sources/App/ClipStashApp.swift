@@ -39,6 +39,7 @@ struct SettingsView: View {
 
 struct GeneralSettingsView: View {
     @State private var launchAtLogin = false
+    @AppStorage("allowPasswordManagerCapture") private var allowPasswordManagerCapture = true
 
     var body: some View {
         Form {
@@ -47,6 +48,13 @@ struct GeneralSettingsView: View {
                     .onChange(of: launchAtLogin) { _, newValue in
                         setLaunchAtLogin(newValue)
                     }
+            }
+
+            Section("Privacy") {
+                Toggle("Capture from Password Managers", isOn: $allowPasswordManagerCapture)
+                Text("If enabled, ClipStash captures from 1Password, LastPass, Bitwarden, etc.\nIf disabled, they are silently ignored.")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.secondary)
             }
 
             Section("Keyboard Shortcut") {

@@ -43,6 +43,14 @@ final class ClipboardWatcher {
         self.lastChangeCount = NSPasteboard.general.changeCount
     }
 
+    /// Whether the user has opted to allow capturing from password managers. Defaults to true.
+    private var isPasswordManagerCaptureAllowed: Bool {
+        if UserDefaults.standard.object(forKey: "allowPasswordManagerCapture") == nil {
+            return true
+        }
+        return UserDefaults.standard.bool(forKey: "allowPasswordManagerCapture")
+    }
+
     // MARK: - Blocklist Management
 
     /// Add a bundle ID to the blocklist.
@@ -93,7 +101,8 @@ final class ClipboardWatcher {
         lastChangeCount = currentCount
 
         // Check if the source app is on the blocklist
-        if let frontApp = NSWorkspace.shared.frontmostApplication,
+        if !isPasswordManagerCaptureAllowed,
+           let frontApp = NSWorkspace.shared.frontmostApplication,
            let bundleID = frontApp.bundleIdentifier,
            blocklist.contains(bundleID) {
             return  // silently skip — never capture from blocked apps
