@@ -39,7 +39,6 @@ struct SettingsView: View {
 
 struct GeneralSettingsView: View {
     @State private var launchAtLogin = false
-    @State private var openAIApiKey = KeychainHelper.load(account: "openai") ?? ""
 
     var body: some View {
         Form {
@@ -75,28 +74,6 @@ struct GeneralSettingsView: View {
                             .font(.system(size: 11))
                     }
                     Text("Powered by Apple NLEmbedding. Works locally, no account needed.")
-                        .font(.system(size: 11))
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.vertical, 4)
-                
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Text("OpenAI API Key (For Summaries & Tags)")
-                        Spacer()
-                    }
-                    
-                    SecureField("sk-proj-...", text: $openAIApiKey)
-                        .textFieldStyle(.roundedBorder)
-                        .onChange(of: openAIApiKey) { _, newValue in
-                            if newValue.starts(with: "sk-") {
-                                try? KeychainHelper.save(newValue, account: "openai")
-                            } else if newValue.isEmpty {
-                                KeychainHelper.delete(account: "openai")
-                            }
-                        }
-                    
-                    Text("API keys are stored securely in macOS Keychain. Required for auto-summaries and tags.")
                         .font(.system(size: 11))
                         .foregroundStyle(.secondary)
                 }

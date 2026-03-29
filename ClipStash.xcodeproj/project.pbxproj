@@ -29,7 +29,7 @@
 		F1770257DEAE07C97175E93C /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABD883A560D317B46FDDDF3 /* HotkeyManager.swift */; };
 		FD444D283F0CDC8D8F464E31 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AECAE3FB1DC0F16BE2B2E20 /* AppDelegate.swift */; };
 		FEAD8C5FF6485D94EF424C22 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 4D6411D0941B43996EDEB0CB /* GRDB */; };
-		FF454793186C4F5A4E2D0104 /* SummaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F00ABBB51F6FBAFEFC7E4C /* SummaryService.swift */; };
+
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,7 +42,7 @@
 		4468B74DEC62A19483B18DF7 /* ClipRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipRowView.swift; sourceTree = "<group>"; };
 		4AA570DC616D3BC2D68CBC81 /* ClipRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipRepository.swift; sourceTree = "<group>"; };
 		4AECAE3FB1DC0F16BE2B2E20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		52F00ABBB51F6FBAFEFC7E4C /* SummaryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryService.swift; sourceTree = "<group>"; };
+
 		564E4ED567E8B657E3371936 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		618B7F1480BE7061D8DFBE10 /* ClipListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipListViewModel.swift; sourceTree = "<group>"; };
 		73BB7F8E6CD78CEA36E47075 /* AppDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabase.swift; sourceTree = "<group>"; };
@@ -78,7 +78,7 @@
 				18C8DDB1CCE6FFF68D05088C /* EmbeddingService.swift */,
 				1ABD883A560D317B46FDDDF3 /* HotkeyManager.swift */,
 				0665A2A48823331B3DEAEF83 /* KeychainHelper.swift */,
-				52F00ABBB51F6FBAFEFC7E4C /* SummaryService.swift */,
+
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -255,7 +255,7 @@
 				8DAD04BDDF331D5A88738049 /* SearchBarView.swift in Sources */,
 				43D223F1A9C587D20644D439 /* SettingsWindowManager.swift in Sources */,
 				D4C39E6BB1B9A1E7B3F04A2B /* String+Ext.swift in Sources */,
-				FF454793186C4F5A4E2D0104 /* SummaryService.swift in Sources */,
+
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
