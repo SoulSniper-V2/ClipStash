@@ -24,12 +24,14 @@
 		AEEFBEEFEA1E2B0FD8BDBEC5 /* ClipboardWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0921CD1E558321133890107 /* ClipboardWatcher.swift */; };
 		D4C39E6BB1B9A1E7B3F04A2B /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564E4ED567E8B657E3371936 /* String+Ext.swift */; };
 		F1770257DEAE07C97175E93C /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABD883A560D317B46FDDDF3 /* HotkeyManager.swift */; };
+		F6E295670A1CE8CE020169E4 /* AIProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1736C6F45280506910D0A6E9 /* AIProcessor.swift */; };
 		FD444D283F0CDC8D8F464E31 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AECAE3FB1DC0F16BE2B2E20 /* AppDelegate.swift */; };
 		FEAD8C5FF6485D94EF424C22 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 4D6411D0941B43996EDEB0CB /* GRDB */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0253C6C97784AA7B4A3FC2F4 /* NSRunningApplication+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRunningApplication+Ext.swift"; sourceTree = "<group>"; };
+		1736C6F45280506910D0A6E9 /* AIProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProcessor.swift; sourceTree = "<group>"; };
 		1ABD883A560D317B46FDDDF3 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
 		2B64412DEB0AA06FE22E3413 /* LLMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMService.swift; sourceTree = "<group>"; };
 		2C4F4918D2370829FA617004 /* ClipItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipItem.swift; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 		1AD0FA294C32BF16B7086604 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				1736C6F45280506910D0A6E9 /* AIProcessor.swift */,
 				F0921CD1E558321133890107 /* ClipboardWatcher.swift */,
 				1ABD883A560D317B46FDDDF3 /* HotkeyManager.swift */,
 				2B64412DEB0AA06FE22E3413 /* LLMService.swift */,
@@ -222,6 +225,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6E295670A1CE8CE020169E4 /* AIProcessor.swift in Sources */,
 				17F3B7C6A1AA5E82EA68A1BA /* AppDatabase.swift in Sources */,
 				FD444D283F0CDC8D8F464E31 /* AppDelegate.swift in Sources */,
 				3B8DBAAB41E365B969E89579 /* ClipItem.swift in Sources */,

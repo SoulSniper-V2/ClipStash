@@ -19,6 +19,12 @@ struct ClipItem: Codable, Identifiable, Equatable, Hashable {
     var isPinned: Bool
     /// SHA-256 hash of content for deduplication.
     var contentHash: String
+    /// AI-generated one-line summary (nil until generated).
+    var summary: String?
+    /// AI-generated tags, comma-separated (nil until generated).
+    var aiTags: String?
+    /// Whether this clip has been embedded for semantic search.
+    var isEmbedded: Bool
 
     /// Parsed content type enum.
     var type: ContentType {
@@ -52,6 +58,7 @@ extension ClipItem: FetchableRecord, PersistableRecord {
     enum Columns: String, ColumnExpression {
         case id, content, contentType, sourceApp
         case sourceAppBundleID, timestamp, isPinned, contentHash
+        case summary, aiTags, isEmbedded
     }
 
     /// Let GRDB auto-generate the ID on insert.

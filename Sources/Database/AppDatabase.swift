@@ -79,6 +79,15 @@ final class AppDatabase {
             }
         }
 
+        // v3: AI features — summary, tags, embedding status
+        migrator.registerMigration("v3_aiColumns") { db in
+            try db.alter(table: "clipItem") { t in
+                t.add(column: "summary", .text)
+                t.add(column: "aiTags", .text)
+                t.add(column: "isEmbedded", .boolean).notNull().defaults(to: false)
+            }
+        }
+
         return migrator
     }
 }

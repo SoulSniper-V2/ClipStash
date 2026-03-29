@@ -24,6 +24,19 @@ struct ClipRowView: View {
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
 
+                // AI Summary (if available)
+                if let summary = clip.summary {
+                    HStack(spacing: 3) {
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 8))
+                            .foregroundStyle(Color(hex: "#A371F7"))
+                        Text(summary)
+                            .font(.system(size: 10.5, weight: .regular, design: .default))
+                            .foregroundStyle(Color(hex: "#A371F7").opacity(0.8))
+                            .lineLimit(1)
+                    }
+                }
+
                 // Metadata row
                 HStack(spacing: 6) {
                     // Source app icon + name
@@ -50,6 +63,22 @@ struct ClipRowView: View {
                             Capsule()
                                 .fill(Color(hex: clip.type.accentHex).opacity(0.15))
                         }
+
+                    // AI tags
+                    if let tags = clip.aiTags?.components(separatedBy: ",").prefix(2),
+                       !tags.isEmpty {
+                        ForEach(Array(tags), id: \.self) { tag in
+                            Text(tag.trimmingCharacters(in: .whitespaces))
+                                .font(.system(size: 8, weight: .medium))
+                                .foregroundStyle(Color(hex: "#3FB950"))
+                                .padding(.horizontal, 4)
+                                .padding(.vertical, 1)
+                                .background {
+                                    Capsule()
+                                        .fill(Color(hex: "#3FB950").opacity(0.12))
+                                }
+                        }
+                    }
 
                     Spacer()
 

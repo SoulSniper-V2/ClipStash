@@ -4,6 +4,7 @@ import Foundation
 import GRDB
 
 /// Drives the popover clip list UI with live database observation and search.
+/// V2: Adds semantic search via llm CLI and summary display.
 @MainActor
 final class ClipListViewModel: ObservableObject {
     // MARK: - Published State
@@ -11,17 +12,27 @@ final class ClipListViewModel: ObservableObject {
     @Published var clips: [ClipItem] = []
     @Published var searchQuery: String = ""
     @Published var isSearching: Bool = false
+    @Published var isSemanticSearching: Bool = false
     @Published var totalCount: Int = 0
     @Published var selectedClipID: Int64?
+    @Published var aiAvailable: Bool = false
+    @Published var searchMode: SearchMode = .standard
+
+    enum SearchMode: String, CaseIterable {
+        case standard = "Text"
+        case semantic = "AI"
+    }
 
     // MARK: - Dependencies
 
     private let repository: ClipRepository
+    private let llm = LLMService.shared
     private var observation: AnyDatabaseCancellable?
     private var searchDebounce: AnyCancellable?
 
     init(repository: ClipRepository = ClipRepository()) {
         self.repository = repository
+        self.aiAvailable = llm.isInstalled
         startObservation()
         setupSearchDebounce()
     }
@@ -67,6 +78,7 @@ final class ClipListViewModel: ObservableObject {
 
         if trimmed.isEmpty {
             isSearching = false
+            isSemanticSearching = false
             // Re-fetch from observation (it'll push the latest)
             do {
                 clips = try repository.recentClips(limit: 100)
@@ -78,22 +90,75 @@ final class ClipListViewModel: ObservableObject {
 
         isSearching = true
 
+        // Choose search mode
+        if searchMode == .semantic && aiAvailable {
+            performSemanticSearch(query: trimmed)
+        } else {
+            performTextSearch(query: trimmed)
+        }
+    }
+
+    /// Standard FTS5 + LIKE text search.
+    private func performTextSearch(query: String) {
+        isSemanticSearching = false
+
         do {
             // Try FTS5 first, fall back to LIKE
-            let results = try repository.ftsSearch(query: trimmed)
+            let results = try repository.ftsSearch(query: query)
             if results.isEmpty {
-                // Fallback: plain LIKE search
-                clips = try repository.search(query: trimmed)
+                clips = try repository.search(query: query)
             } else {
                 clips = results
             }
         } catch {
-            // If FTS fails (bad query syntax), fall back to LIKE
             do {
-                clips = try repository.search(query: trimmed)
+                clips = try repository.search(query: query)
             } catch {
                 print("ClipListViewModel: search error: \(error)")
             }
+        }
+    }
+
+    /// AI-powered semantic search via llm embeddings.
+    private func performSemanticSearch(query: String) {
+        isSemanticSearching = true
+
+        Task {
+            let results = await llm.semanticSearch(query: query, limit: 20)
+
+            if results.isEmpty {
+                // Fall back to text search if semantic search returns nothing
+                performTextSearch(query: query)
+                return
+            }
+
+            // Fetch the actual ClipItems by their IDs
+            var matchedClips: [ClipItem] = []
+            for result in results {
+                if let id = Int64(result.id),
+                   let clip = try? repository.fetchClip(id: id) {
+                    matchedClips.append(clip)
+                }
+            }
+
+            if matchedClips.isEmpty {
+                // Fall back to text search
+                performTextSearch(query: query)
+            } else {
+                clips = matchedClips
+                isSemanticSearching = false
+            }
+        }
+    }
+
+    // MARK: - Search Mode Toggle
+
+    /// Toggle between standard text search and semantic AI search.
+    func toggleSearchMode() {
+        searchMode = searchMode == .standard ? .semantic : .standard
+        // Re-run search with new mode if there's a query
+        if !searchQuery.isEmpty {
+            performSearch(query: searchQuery)
         }
     }
 
@@ -144,7 +209,6 @@ final class ClipListViewModel: ObservableObject {
             let newIndex = max(0, min(clips.count - 1, currentIndex + direction))
             selectedClipID = clips[newIndex].id
         } else {
-            // Nothing selected — select first
             selectedClipID = clips.first?.id
         }
     }

@@ -14,10 +14,57 @@ struct PopoverContentView: View {
                 .opacity(0.3)
 
             // MARK: - Search
-            SearchBarView(text: $viewModel.searchQuery)
-                .padding(.horizontal, 10)
-                .padding(.top, 10)
-                .padding(.bottom, 6)
+            HStack(spacing: 6) {
+                SearchBarView(text: $viewModel.searchQuery)
+
+                // AI search toggle (only visible if llm is installed)
+                if viewModel.aiAvailable {
+                    Button {
+                        viewModel.toggleSearchMode()
+                    } label: {
+                        HStack(spacing: 3) {
+                            Image(systemName: viewModel.searchMode == .semantic
+                                ? "sparkles" : "text.magnifyingglass")
+                                .font(.system(size: 10))
+                            Text(viewModel.searchMode.rawValue)
+                                .font(.system(size: 9, weight: .semibold))
+                        }
+                        .foregroundStyle(
+                            viewModel.searchMode == .semantic
+                                ? Color(hex: "#A371F7")
+                                : .secondary
+                        )
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 5)
+                        .background {
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .fill(
+                                    viewModel.searchMode == .semantic
+                                        ? Color(hex: "#A371F7").opacity(0.15)
+                                        : Color.white.opacity(0.06)
+                                )
+                        }
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, 10)
+            .padding(.top, 10)
+            .padding(.bottom, 6)
+
+            // Semantic search indicator
+            if viewModel.isSemanticSearching {
+                HStack(spacing: 4) {
+                    ProgressView()
+                        .scaleEffect(0.5)
+                        .frame(width: 12, height: 12)
+                    Text("Searching with AI…")
+                        .font(.system(size: 10))
+                        .foregroundStyle(Color(hex: "#A371F7"))
+                }
+                .padding(.bottom, 4)
+                .transition(.opacity)
+            }
 
             // MARK: - Content
             if viewModel.clips.isEmpty {
@@ -39,7 +86,6 @@ struct PopoverContentView: View {
             Rectangle()
                 .fill(.ultraThinMaterial)
                 .overlay {
-                    // Subtle gradient overlay for depth
                     LinearGradient(
                         colors: [
                             Color(hex: "#0D1117").opacity(0.6),

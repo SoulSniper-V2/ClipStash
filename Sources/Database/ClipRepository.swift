@@ -161,4 +161,66 @@ final class ClipRepository {
             try ClipItem.fetchCount(db)
         }
     }
+
+    // MARK: - AI Features
+
+    /// Update the AI-generated summary for a clip.
+    func updateSummary(id: Int64, summary: String) throws {
+        try db.dbQueue.write { db in
+            if var clip = try ClipItem.fetchOne(db, id: id) {
+                clip.summary = summary
+                try clip.update(db)
+            }
+        }
+    }
+
+    /// Update the AI-generated tags for a clip.
+    func updateTags(id: Int64, tags: [String]) throws {
+        try db.dbQueue.write { db in
+            if var clip = try ClipItem.fetchOne(db, id: id) {
+                clip.aiTags = tags.joined(separator: ",")
+                try clip.update(db)
+            }
+        }
+    }
+
+    /// Mark a clip as embedded for semantic search.
+    func markEmbedded(id: Int64) throws {
+        try db.dbQueue.write { db in
+            if var clip = try ClipItem.fetchOne(db, id: id) {
+                clip.isEmbedded = true
+                try clip.update(db)
+            }
+        }
+    }
+
+    /// Fetch clips that haven't been embedded yet (for background processing).
+    func unembeddedClips(limit: Int = 50) throws -> [ClipItem] {
+        try db.dbQueue.read { db in
+            try ClipItem
+                .filter(ClipItem.Columns.isEmbedded == false)
+                .order(ClipItem.Columns.timestamp.desc)
+                .limit(limit)
+                .fetchAll(db)
+        }
+    }
+
+    /// Fetch clips that haven't been summarized yet (long content only).
+    func unsummarizedClips(limit: Int = 20) throws -> [ClipItem] {
+        try db.dbQueue.read { db in
+            try ClipItem
+                .filter(ClipItem.Columns.summary == nil)
+                .filter(length(ClipItem.Columns.content) > 200)
+                .order(ClipItem.Columns.timestamp.desc)
+                .limit(limit)
+                .fetchAll(db)
+        }
+    }
+
+    /// Fetch a clip by ID.
+    func fetchClip(id: Int64) throws -> ClipItem? {
+        try db.dbQueue.read { db in
+            try ClipItem.fetchOne(db, id: id)
+        }
+    }
 }

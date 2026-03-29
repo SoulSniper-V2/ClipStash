@@ -129,7 +129,10 @@ final class ClipboardWatcher {
             sourceAppBundleID: bundleID,
             timestamp: Date(),
             isPinned: false,
-            contentHash: hash
+            contentHash: hash,
+            summary: nil,
+            aiTags: nil,
+            isEmbedded: false
         )
 
         // Insert into database
