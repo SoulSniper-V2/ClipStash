@@ -189,7 +189,35 @@ struct PopoverContentView: View {
                         NSCursor.pop()
                     }
                 }
+                
+                Divider()
+                    .frame(height: 10)
+                    .padding(.horizontal, 4)
             }
+            
+            // Settings Button
+            Button {
+                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                NSApp.activate(ignoringOtherApps: true)
+                onDismiss?()
+            } label: {
+                Image(systemName: "gearshape.fill")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+            .help("Settings")
+            
+            // Quit Button
+            Button {
+                NSApp.terminate(nil)
+            } label: {
+                Image(systemName: "power")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+            .help("Quit ClipStash")
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 8)
