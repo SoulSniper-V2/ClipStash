@@ -132,7 +132,7 @@ final class ClipboardWatcher {
             contentHash: hash,
             summary: nil,
             aiTags: nil,
-            isEmbedded: false
+            embedding: nil
         )
 
         // Insert into database

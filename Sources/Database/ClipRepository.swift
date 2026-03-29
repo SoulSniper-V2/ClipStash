@@ -184,11 +184,11 @@ final class ClipRepository {
         }
     }
 
-    /// Mark a clip as embedded for semantic search.
-    func markEmbedded(id: Int64) throws {
+    /// Mark a clip as embedded by storing its vector.
+    func updateEmbedding(id: Int64, data: Data) throws {
         try db.dbQueue.write { db in
             if var clip = try ClipItem.fetchOne(db, id: id) {
-                clip.isEmbedded = true
+                clip.embedding = data
                 try clip.update(db)
             }
         }
@@ -198,7 +198,7 @@ final class ClipRepository {
     func unembeddedClips(limit: Int = 50) throws -> [ClipItem] {
         try db.dbQueue.read { db in
             try ClipItem
-                .filter(ClipItem.Columns.isEmbedded == false)
+                .filter(ClipItem.Columns.embedding == nil)
                 .order(ClipItem.Columns.timestamp.desc)
                 .limit(limit)
                 .fetchAll(db)

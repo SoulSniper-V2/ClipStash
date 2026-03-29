@@ -9,7 +9,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var popover: NSPopover!
     private var clipboardWatcher: ClipboardWatcher!
     private var hotkeyManager: HotkeyManager!
-    private var aiProcessor: AIProcessor!
     private var eventMonitor: Any?
 
     // MARK: - App Lifecycle
@@ -19,7 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         setupPopover()
         setupClipboardWatcher()
         setupHotkeyManager()
-        setupAIProcessor()
+        BackgroundProcessor.shared.start()
         setupClickOutsideMonitor()
 
         // Hide dock icon (belt-and-suspenders with LSUIElement)
@@ -29,7 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillTerminate(_ notification: Notification) {
         clipboardWatcher.stop()
         hotkeyManager.stop()
-        aiProcessor.stop()
+        BackgroundProcessor.shared.stop()
     }
 
     // MARK: - Status Item (Menu Bar Icon)
@@ -94,8 +93,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         clipboardWatcher.onNewClip = { [weak self] clip in
             // Flash the menu bar icon briefly on new clip
             self?.flashStatusIcon()
-            // Trigger AI processing for the new clip
-            self?.aiProcessor.processNewClip(clip)
+            // Trigger background AI processing for the new clip
+            BackgroundProcessor.shared.processImmediately(clip)
         }
         clipboardWatcher.start()
     }
@@ -137,12 +136,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             guard let self = self, self.popover.isShown else { return }
             self.closePopover()
         }
-    }
-
-    // MARK: - AI Processor
-
-    private func setupAIProcessor() {
-        aiProcessor = AIProcessor()
-        aiProcessor.start()
     }
 }

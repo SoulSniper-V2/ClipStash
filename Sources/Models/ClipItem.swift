@@ -23,8 +23,19 @@ struct ClipItem: Codable, Identifiable, Equatable, Hashable {
     var summary: String?
     /// AI-generated tags, comma-separated (nil until generated).
     var aiTags: String?
-    /// Whether this clip has been embedded for semantic search.
-    var isEmbedded: Bool
+    /// CoreML semantic sentence embedding (NLEmbedding).
+    var embedding: Data?
+
+    /// Computed helper to get back the native Float array.
+    var embeddingVector: [Float]? {
+        guard let data = embedding else { return nil }
+        return EmbeddingService.shared.dataToVector(data)
+    }
+
+    /// Computed helper to extract standard tags.
+    var aiTagList: [String] {
+        aiTags?.split(separator: ",").map(String.init) ?? []
+    }
 
     /// Parsed content type enum.
     var type: ContentType {
@@ -58,7 +69,7 @@ extension ClipItem: FetchableRecord, PersistableRecord {
     enum Columns: String, ColumnExpression {
         case id, content, contentType, sourceApp
         case sourceAppBundleID, timestamp, isPinned, contentHash
-        case summary, aiTags, isEmbedded
+        case summary, aiTags, embedding
     }
 
     /// Let GRDB auto-generate the ID on insert.

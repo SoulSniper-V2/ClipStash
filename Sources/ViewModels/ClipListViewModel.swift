@@ -15,7 +15,7 @@ final class ClipListViewModel: ObservableObject {
     @Published var isSemanticSearching: Bool = false
     @Published var totalCount: Int = 0
     @Published var selectedClipID: Int64?
-    @Published var aiAvailable: Bool = false
+    @Published var aiAvailable: Bool = true // Always true locally on macOS 14+
     @Published var searchMode: SearchMode = .standard
 
     enum SearchMode: String, CaseIterable {
@@ -26,13 +26,11 @@ final class ClipListViewModel: ObservableObject {
     // MARK: - Dependencies
 
     private let repository: ClipRepository
-    private let llm = LLMService.shared
     private var observation: AnyDatabaseCancellable?
     private var searchDebounce: AnyCancellable?
 
     init(repository: ClipRepository = ClipRepository()) {
         self.repository = repository
-        self.aiAvailable = llm.isInstalled
         startObservation()
         setupSearchDebounce()
     }
@@ -119,34 +117,29 @@ final class ClipListViewModel: ObservableObject {
         }
     }
 
-    /// AI-powered semantic search via llm embeddings.
+    /// AI-powered semantic search via local NLEmbedding vectors.
     private func performSemanticSearch(query: String) {
         isSemanticSearching = true
 
         Task {
-            let results = await llm.semanticSearch(query: query, limit: 20)
+            do {
+                // Fetch up to 1000 recent clips to search against natively
+                let searchableClips = try repository.recentClips(limit: 1000)
+                let matchedClips = EmbeddingService.shared.findSimilar(
+                    to: query,
+                    in: searchableClips,
+                    threshold: 0.45
+                )
 
-            if results.isEmpty {
-                // Fall back to text search if semantic search returns nothing
-                performTextSearch(query: query)
-                return
-            }
-
-            // Fetch the actual ClipItems by their IDs
-            var matchedClips: [ClipItem] = []
-            for result in results {
-                if let id = Int64(result.id),
-                   let clip = try? repository.fetchClip(id: id) {
-                    matchedClips.append(clip)
+                if matchedClips.isEmpty {
+                    performTextSearch(query: query)
+                } else {
+                    clips = matchedClips
+                    isSemanticSearching = false
                 }
-            }
-
-            if matchedClips.isEmpty {
-                // Fall back to text search
+            } catch {
+                print("ClipListViewModel: Semantic search error: \(error)")
                 performTextSearch(query: query)
-            } else {
-                clips = matchedClips
-                isSemanticSearching = false
             }
         }
     }

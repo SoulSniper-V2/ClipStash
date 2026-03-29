@@ -19,8 +19,6 @@ struct ClipStashApp: App {
 // MARK: - Settings View (minimal V1)
 
 struct SettingsView: View {
-    @State private var llmInstalled: Bool = LLMService.shared.isInstalled
-
     var body: some View {
         TabView {
             GeneralSettingsView()
@@ -41,7 +39,7 @@ struct SettingsView: View {
 
 struct GeneralSettingsView: View {
     @State private var launchAtLogin = false
-    @State private var llmInstalled = LLMService.shared.isInstalled
+    @State private var openAIApiKey = KeychainHelper.load(account: "openai") ?? ""
 
     var body: some View {
         Form {
@@ -67,26 +65,42 @@ struct GeneralSettingsView: View {
                 }
             }
 
-            Section("AI Integration") {
-                HStack {
-                    Text("llm CLI")
-                    Spacer()
-                    if llmInstalled {
-                        Label("Installed", systemImage: "checkmark.circle.fill")
+            Section("AI Features") {
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text("Semantic Search")
+                        Spacer()
+                        Label("Enabled", systemImage: "circle.fill")
                             .foregroundStyle(.green)
-                            .font(.system(size: 12))
-                    } else {
-                        Label("Not Found", systemImage: "xmark.circle")
-                            .foregroundStyle(.secondary)
-                            .font(.system(size: 12))
+                            .font(.system(size: 11))
                     }
-                }
-
-                if !llmInstalled {
-                    Text("Install with: brew install llm or pip install llm")
+                    Text("Powered by Apple NLEmbedding. Works locally, no account needed.")
                         .font(.system(size: 11))
                         .foregroundStyle(.secondary)
                 }
+                .padding(.vertical, 4)
+                
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Text("OpenAI API Key (For Summaries & Tags)")
+                        Spacer()
+                    }
+                    
+                    SecureField("sk-proj-...", text: $openAIApiKey)
+                        .textFieldStyle(.roundedBorder)
+                        .onChange(of: openAIApiKey) { _, newValue in
+                            if newValue.starts(with: "sk-") {
+                                try? KeychainHelper.save(newValue, account: "openai")
+                            } else if newValue.isEmpty {
+                                KeychainHelper.delete(account: "openai")
+                            }
+                        }
+                    
+                    Text("API keys are stored securely in macOS Keychain. Required for auto-summaries and tags.")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.vertical, 4)
             }
         }
         .formStyle(.grouped)
@@ -133,7 +147,7 @@ struct AboutView: View {
                     .foregroundStyle(.secondary)
             }
 
-            Text("A premium clipboard manager for macOS.\nPowered by SQLite + future AI via llm CLI.")
+            Text("A premium clipboard manager for macOS.\nPowered by SQLite & NLEmbedding.")
                 .font(.system(size: 12))
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
