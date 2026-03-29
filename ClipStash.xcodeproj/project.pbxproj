@@ -16,6 +16,7 @@
 		3B8DBAAB41E365B969E89579 /* ClipItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4F4918D2370829FA617004 /* ClipItem.swift */; };
 		3C2741351DB4766A4B625298 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D2E98B06FB9FDD3F87395F5 /* EmptyStateView.swift */; };
 		4031A09703B2D2A3BB012C48 /* ContentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE781603E76DC051CDDC04B /* ContentType.swift */; };
+		43D223F1A9C587D20644D439 /* SettingsWindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4DBC8459D7B28C05B17176 /* SettingsWindowManager.swift */; };
 		4CF90F3CD7C59107A5F1E6A5 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0665A2A48823331B3DEAEF83 /* KeychainHelper.swift */; };
 		6AF882E7572FF147E0384DDD /* NSRunningApplication+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0253C6C97784AA7B4A3FC2F4 /* NSRunningApplication+Ext.swift */; };
 		6E2DD92536312A679CB191A6 /* DateFormatter+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF14A5B5265665260F7EF97 /* DateFormatter+Ext.swift */; };
@@ -52,6 +53,7 @@
 		BAE781603E76DC051CDDC04B /* ContentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentType.swift; sourceTree = "<group>"; };
 		BBF14A5B5265665260F7EF97 /* DateFormatter+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Ext.swift"; sourceTree = "<group>"; };
 		D027642B2A2306CF2462953D /* ClipListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipListView.swift; sourceTree = "<group>"; };
+		DF4DBC8459D7B28C05B17176 /* SettingsWindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowManager.swift; sourceTree = "<group>"; };
 		F0921CD1E558321133890107 /* ClipboardWatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardWatcher.swift; sourceTree = "<group>"; };
 		FC137EE49BAD6368F70FA4F1 /* PopoverContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -98,6 +100,7 @@
 			children = (
 				4AECAE3FB1DC0F16BE2B2E20 /* AppDelegate.swift */,
 				B16A6D7E5AE29D2B7068A40C /* ClipStashApp.swift */,
+				DF4DBC8459D7B28C05B17176 /* SettingsWindowManager.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -250,6 +253,7 @@
 				6AF882E7572FF147E0384DDD /* NSRunningApplication+Ext.swift in Sources */,
 				11D1A3EDE260280549D1C09F /* PopoverContentView.swift in Sources */,
 				8DAD04BDDF331D5A88738049 /* SearchBarView.swift in Sources */,
+				43D223F1A9C587D20644D439 /* SettingsWindowManager.swift in Sources */,
 				D4C39E6BB1B9A1E7B3F04A2B /* String+Ext.swift in Sources */,
 				FF454793186C4F5A4E2D0104 /* SummaryService.swift in Sources */,
 			);

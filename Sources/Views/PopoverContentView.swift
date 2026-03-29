@@ -197,8 +197,7 @@ struct PopoverContentView: View {
             
             // Settings Button
             Button {
-                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-                NSApp.activate(ignoringOtherApps: true)
+                SettingsWindowManager.shared.show()
                 onDismiss?()
             } label: {
                 Image(systemName: "gearshape.fill")

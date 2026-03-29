@@ -9,9 +9,9 @@ struct ClipStashApp: App {
 
     var body: some Scene {
         // No WindowGroup — this is a menu bar-only app.
-        // Settings scene for future preferences window.
+        // We handle the Settings UI manually via `SettingsWindowManager`.
         Settings {
-            SettingsView()
+            EmptyView()
         }
     }
 }
