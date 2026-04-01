@@ -147,18 +147,10 @@ struct GeneralSettingsView: View {
 struct AboutView: View {
     var body: some View {
         VStack(spacing: 16) {
-            Image(systemName: "clipboard.fill")
-                .font(.system(size: 48, weight: .light))
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [
-                            Color(hex: "#58A6FF"),
-                            Color(hex: "#A371F7"),
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
+            Image("AppLogo")
+                .resizable()
+                .interpolation(.high)
+                .frame(width: 56, height: 56)
 
             VStack(spacing: 4) {
                 Text("ClipStash")

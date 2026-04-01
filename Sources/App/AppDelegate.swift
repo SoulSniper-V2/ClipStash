@@ -37,12 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
         if let button = statusItem.button {
-            // Use a clipboard SF Symbol
-            let config = NSImage.SymbolConfiguration(pointSize: 14, weight: .medium)
-            button.image = NSImage(
-                systemSymbolName: "clipboard.fill",
-                accessibilityDescription: "ClipStash"
-            )?.withSymbolConfiguration(config)
+            button.image = logoImage(accessibilityDescription: "ClipStash")
 
             button.action = #selector(togglePopover)
             button.target = self
@@ -102,18 +97,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// Brief visual feedback when a new clip is captured.
     private func flashStatusIcon() {
         guard let button = statusItem.button else { return }
-        let config = NSImage.SymbolConfiguration(pointSize: 14, weight: .bold)
-        let highlightImage = NSImage(
-            systemSymbolName: "clipboard.fill",
-            accessibilityDescription: "New clip"
-        )?.withSymbolConfiguration(config)
 
         let originalImage = button.image
-        button.image = highlightImage
+        button.alphaValue = 0.72
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             button.image = originalImage
+            button.alphaValue = 1.0
         }
+    }
+
+    private func logoImage(accessibilityDescription: String) -> NSImage? {
+        let image = NSImage(named: "AppLogo")
+        image?.size = NSSize(width: 18, height: 18)
+        image?.accessibilityDescription = accessibilityDescription
+        image?.isTemplate = false
+        return image
     }
 
     // MARK: - Hotkey

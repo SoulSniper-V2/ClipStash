@@ -123,18 +123,10 @@ struct PopoverContentView: View {
         HStack {
             // App branding
             HStack(spacing: 6) {
-                Image(systemName: "clipboard.fill")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [
-                                Color(hex: "#58A6FF"),
-                                Color(hex: "#A371F7"),
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                Image("AppLogo")
+                    .resizable()
+                    .interpolation(.high)
+                    .frame(width: 16, height: 16)
 
                 Text("ClipStash")
                     .font(.system(size: 14, weight: .bold))
