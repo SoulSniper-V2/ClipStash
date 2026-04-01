@@ -32,6 +32,7 @@ Built for developers and power users who copy dozens of things a day and lose ha
 - **One-click re-copy** — Click any clip to copy it back to your clipboard
 - **Pin important clips** — Pin clips to keep them at the top permanently
 - **Privacy Controls** — Configurable capturing from password managers (1Password, LastPass, Bitwarden, Dashlane, KeePassXC, Keychain Access)
+- **Retention Controls** — Automatically remove old non-pinned clips after 7 days, 30 days, or never
 - **AI-powered** — Native on-device semantic search using Apple's `NLEmbedding` framework
 - **No Dock icon** — Pure menu bar app. Zero visual noise.
 
@@ -70,6 +71,14 @@ Built for developers and power users who copy dozens of things a day and lose ha
 
 ## 🚀 Getting Started
 
+### Install with Homebrew
+
+```bash
+brew install --cask soulsniper-v2/tap/clipstash
+```
+
+> **Gatekeeper note:** ClipStash is currently distributed without Apple Developer ID signing/notarization. Installs from the Homebrew tap remove quarantine automatically. If you launch the app from a downloaded DMG and macOS blocks it, go to **System Settings → Privacy & Security** and click **Open Anyway**.
+
 ### Clone & Build
 
 ```bash
@@ -103,6 +112,13 @@ swift run
 | Copy selected clip | `↵` Enter |
 | Close popover | `Esc` |
 | Pin / Delete clip | Right-click context menu |
+
+## ⚙️ Settings
+
+- **Launch at Login** — Start ClipStash automatically when you sign in
+- **Capture from Password Managers** — Allow or block history capture from sensitive apps
+- **Keep Clipboard History** — Automatically prune non-pinned clips after 7 days, 30 days, or never
+- **Semantic Search** — Uses Apple `NLEmbedding` locally with no account required
 
 ## 🗂 Project Structure
 
@@ -158,7 +174,6 @@ All data is stored locally in `~/Library/Application Support/ClipStash/history.d
 ### V3 — Power Features
 - [ ] Snippets with custom trigger keywords
 - [ ] iCloud sync across Macs
-- [ ] Configurable expiry rules
 - [ ] Settings UI for privacy blocklist
 - [ ] Customizable keyboard shortcuts
 

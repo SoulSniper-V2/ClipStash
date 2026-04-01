@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		02181C936B25E857BA13FB1A /* ClipStashApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16A6D7E5AE29D2B7068A40C /* ClipStashApp.swift */; };
 		03D168CFE26063E1423EE44F /* ClipRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA570DC616D3BC2D68CBC81 /* ClipRepository.swift */; };
+		0AEBD56984EFD581E297F016 /* HistoryRetentionPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C68C82161306EE202D1B031 /* HistoryRetentionPolicy.swift */; };
 		11D1A3EDE260280549D1C09F /* PopoverContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC137EE49BAD6368F70FA4F1 /* PopoverContentView.swift */; };
 		17F3B7C6A1AA5E82EA68A1BA /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73BB7F8E6CD78CEA36E47075 /* AppDatabase.swift */; };
 		26C495977CC211B6F3907994 /* EmbeddingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C8DDB1CCE6FFF68D05088C /* EmbeddingService.swift */; };
@@ -29,7 +30,6 @@
 		F1770257DEAE07C97175E93C /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABD883A560D317B46FDDDF3 /* HotkeyManager.swift */; };
 		FD444D283F0CDC8D8F464E31 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AECAE3FB1DC0F16BE2B2E20 /* AppDelegate.swift */; };
 		FEAD8C5FF6485D94EF424C22 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 4D6411D0941B43996EDEB0CB /* GRDB */; };
-
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,12 +37,12 @@
 		0665A2A48823331B3DEAEF83 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		18C8DDB1CCE6FFF68D05088C /* EmbeddingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddingService.swift; sourceTree = "<group>"; };
 		1ABD883A560D317B46FDDDF3 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
+		1C68C82161306EE202D1B031 /* HistoryRetentionPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRetentionPolicy.swift; sourceTree = "<group>"; };
 		2C4F4918D2370829FA617004 /* ClipItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipItem.swift; sourceTree = "<group>"; };
 		397CC1A0AD0AD107A627AF8B /* BackgroundProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundProcessor.swift; sourceTree = "<group>"; };
 		4468B74DEC62A19483B18DF7 /* ClipRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipRowView.swift; sourceTree = "<group>"; };
 		4AA570DC616D3BC2D68CBC81 /* ClipRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipRepository.swift; sourceTree = "<group>"; };
 		4AECAE3FB1DC0F16BE2B2E20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-
 		564E4ED567E8B657E3371936 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		618B7F1480BE7061D8DFBE10 /* ClipListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipListViewModel.swift; sourceTree = "<group>"; };
 		73BB7F8E6CD78CEA36E47075 /* AppDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabase.swift; sourceTree = "<group>"; };
@@ -78,7 +78,6 @@
 				18C8DDB1CCE6FFF68D05088C /* EmbeddingService.swift */,
 				1ABD883A560D317B46FDDDF3 /* HotkeyManager.swift */,
 				0665A2A48823331B3DEAEF83 /* KeychainHelper.swift */,
-
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -132,6 +131,7 @@
 			children = (
 				2C4F4918D2370829FA617004 /* ClipItem.swift */,
 				BAE781603E76DC051CDDC04B /* ContentType.swift */,
+				1C68C82161306EE202D1B031 /* HistoryRetentionPolicy.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -203,7 +203,8 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					1B0F9AE68C248589D2B42A10 = {
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = Y67PXRT5DY;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -248,6 +249,7 @@
 				6E2DD92536312A679CB191A6 /* DateFormatter+Ext.swift in Sources */,
 				26C495977CC211B6F3907994 /* EmbeddingService.swift in Sources */,
 				3C2741351DB4766A4B625298 /* EmptyStateView.swift in Sources */,
+				0AEBD56984EFD581E297F016 /* HistoryRetentionPolicy.swift in Sources */,
 				F1770257DEAE07C97175E93C /* HotkeyManager.swift in Sources */,
 				4CF90F3CD7C59107A5F1E6A5 /* KeychainHelper.swift in Sources */,
 				6AF882E7572FF147E0384DDD /* NSRunningApplication+Ext.swift in Sources */,
@@ -255,7 +257,6 @@
 				8DAD04BDDF331D5A88738049 /* SearchBarView.swift in Sources */,
 				43D223F1A9C587D20644D439 /* SettingsWindowManager.swift in Sources */,
 				D4C39E6BB1B9A1E7B3F04A2B /* String+Ext.swift in Sources */,
-
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,9 +267,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 230;
+				DEVELOPMENT_TEAM = Y67PXRT5DY;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ClipStash;
@@ -278,6 +280,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 2.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clipstash.app;
 				PRODUCT_NAME = ClipStash;
 				SDKROOT = macosx;
@@ -346,9 +349,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 230;
+				DEVELOPMENT_TEAM = Y67PXRT5DY;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ClipStash;
@@ -358,6 +362,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 2.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clipstash.app;
 				PRODUCT_NAME = ClipStash;
 				SDKROOT = macosx;

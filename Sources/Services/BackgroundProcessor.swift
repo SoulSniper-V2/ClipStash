@@ -56,6 +56,8 @@ final class BackgroundProcessor {
             defer { self.isProcessing = false }
 
             do {
+                self.pruneExpiredClipsIfNeeded()
+
                 // 1. Fetch unembedded clips
                 let clips = try self.repository.unembeddedClips(limit: self.batchSize)
                 if !clips.isEmpty {
@@ -84,6 +86,17 @@ final class BackgroundProcessor {
                 let data = EmbeddingService.shared.vectorToData(vector)
                 try? repository.updateEmbedding(id: id, data: data)
             }
+        }
+    }
+
+    /// Applies the current retention policy to non-pinned history.
+    private func pruneExpiredClipsIfNeeded() {
+        guard let cutoffDate = HistoryRetentionPolicy.current.cutoffDate else { return }
+
+        do {
+            try repository.deleteOlderThan(cutoffDate)
+        } catch {
+            print("BackgroundProcessor retention cleanup error: \(error)")
         }
     }
 }

@@ -26,12 +26,14 @@ targets:
       base:
         PRODUCT_NAME: ClipStash
         PRODUCT_BUNDLE_IDENTIFIER: com.clipstash.app
+        MARKETING_VERSION: 2.3.0
+        CURRENT_PROJECT_VERSION: 230
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_LSUIElement: YES
         INFOPLIST_KEY_CFBundleDisplayName: ClipStash
         SWIFT_VERSION: "5.0"
         MACOSX_DEPLOYMENT_TARGET: "14.0"
-        CODE_SIGN_IDENTITY: "-"
-        CODE_SIGN_STYLE: Manual
+        DEVELOPMENT_TEAM: Y67PXRT5DY
+        CODE_SIGN_STYLE: Automatic
         ENABLE_HARDENED_RUNTIME: YES
         SWIFT_STRICT_CONCURRENCY: minimal
