@@ -56,15 +56,20 @@ final class ClipRepository {
         }
 
         return try db.dbQueue.read { db in
-            // Use FTS5 match, with the pattern trimmed and cleaned
-            let pattern = FTS5Pattern(matchingAnyTokenIn: query)
-            if pattern != nil {
-                return try ClipItem
-                    .joining(required: ClipItem.hasOne(
-                        ClipItem.self, // dummy — we use raw SQL for FTS join
-                        using: ForeignKey(["rowid"], to: ["id"])
-                    ))
-                    .fetchAll(db)
+            if let pattern = FTS5Pattern(matchingAnyTokenIn: query) {
+                let sql = """
+                    SELECT clipItem.*
+                    FROM clipItem
+                    JOIN clipItemFTS ON clipItemFTS.rowid = clipItem.id
+                    WHERE clipItemFTS MATCH ?
+                    ORDER BY clipItem.isPinned DESC, rank
+                    LIMIT 50
+                """
+
+                let ftsResults = try ClipItem.fetchAll(db, sql: sql, arguments: [pattern])
+                if ftsResults.isEmpty == false {
+                    return ftsResults
+                }
             }
 
             // Fallback: LIKE search
