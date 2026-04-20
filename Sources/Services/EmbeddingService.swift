@@ -1,5 +1,6 @@
 import Foundation
 import NaturalLanguage
+import Accelerate
 
 /// Core AI Embedding and Similarity Engine
 /// Provides fully local semantic vectors using Apple's NLEmbedding (128-dimensional).
@@ -62,23 +63,19 @@ final class EmbeddingService {
         guard a.count == b.count, !a.isEmpty else { return 0 }
 
         var dotProduct: Float = 0
-        var magA: Float = 0
-        var magB: Float = 0
-        
-        // Iterate through dimensions (Accelerate framework omitted for build portability)
-        for i in 0..<a.count {
-            let valA = a[i]
-            let valB = b[i]
-            dotProduct += valA * valB
-            magA += valA * valA
-            magB += valB * valB
-        }
-        
-        let valMagA = sqrt(magA)
-        let valMagB = sqrt(magB)
-        
-        guard valMagA > 0, valMagB > 0 else { return 0 }
-        return dotProduct / (valMagA * valMagB)
+        vDSP_dotpr(a, 1, b, 1, &dotProduct, vDSP_Length(a.count))
+
+        var magASquared: Float = 0
+        vDSP_svesq(a, 1, &magASquared, vDSP_Length(a.count))
+
+        var magBSquared: Float = 0
+        vDSP_svesq(b, 1, &magBSquared, vDSP_Length(b.count))
+
+        let magA = sqrt(magASquared)
+        let magB = sqrt(magBSquared)
+
+        guard magA > 0, magB > 0 else { return 0 }
+        return dotProduct / (magA * magB)
     }
 
     // MARK: - Vector Serialization
