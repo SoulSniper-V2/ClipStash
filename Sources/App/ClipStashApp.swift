@@ -147,7 +147,7 @@ struct GeneralSettingsView: View {
 struct AboutView: View {
     var body: some View {
         VStack(spacing: 16) {
-            Image("AppLogo")
+            Image(nsImage: AppResources.logo ?? NSImage())
                 .resizable()
                 .interpolation(.high)
                 .frame(width: 56, height: 56)

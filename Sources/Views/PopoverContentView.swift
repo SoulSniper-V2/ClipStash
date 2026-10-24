@@ -123,7 +123,7 @@ struct PopoverContentView: View {
         HStack {
             // App branding
             HStack(spacing: 6) {
-                Image("AppLogo")
+                Image(nsImage: AppResources.logo ?? NSImage())
                     .resizable()
                     .interpolation(.high)
                     .frame(width: 16, height: 16)

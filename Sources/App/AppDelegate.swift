@@ -108,7 +108,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func logoImage(accessibilityDescription: String) -> NSImage? {
-        let image = NSImage(named: "AppLogo")
+        let image = AppResources.logo
         image?.size = NSSize(width: 18, height: 18)
         image?.accessibilityDescription = accessibilityDescription
         image?.isTemplate = false

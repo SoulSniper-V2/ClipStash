@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 
 /// Drives the popover clip list UI with live database observation and search.
-/// V2: Adds semantic search via llm CLI and summary display.
+/// Supports full-text search and on-device semantic search.
 @MainActor
 final class ClipListViewModel: ObservableObject {
     // MARK: - Published State
@@ -28,6 +28,14 @@ final class ClipListViewModel: ObservableObject {
     private let repository: ClipRepository
     private var observation: AnyDatabaseCancellable?
     private var searchDebounce: AnyCancellable?
+    private let semanticSearchQueue: OperationQueue = {
+        let queue = OperationQueue()
+        queue.name = "com.clipstash.search"
+        queue.maxConcurrentOperationCount = 1
+        queue.qualityOfService = .userInitiated
+        return queue
+    }()
+    private var searchRevision = 0
 
     init(repository: ClipRepository = ClipRepository()) {
         self.repository = repository
@@ -39,19 +47,17 @@ final class ClipListViewModel: ObservableObject {
 
     /// Start observing the database for real-time UI updates.
     private func startObservation() {
-        let observation = repository.recentClipsObservation(limit: 100)
-        self.observation = observation.start(
-            in: AppDatabase.shared.dbQueue,
+        observation = repository.observeHistory(
             onError: { error in
                 print("ClipListViewModel: observation error: \(error)")
             },
-            onChange: { [weak self] (clips: [ClipItem]) in
-                Task { @MainActor in
-                    guard let self = self else { return }
-                    if self.searchQuery.isEmpty {
-                        self.clips = clips
-                    }
-                    self.totalCount = clips.count
+            onChange: { [weak self] snapshot in
+                guard let self = self else { return }
+                self.totalCount = snapshot.totalCount
+                if self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    self.clips = snapshot.clips
+                } else {
+                    self.performSearch(query: self.searchQuery)
                 }
             }
         )
@@ -66,13 +72,16 @@ final class ClipListViewModel: ObservableObject {
             .removeDuplicates()
             .sink { [weak self] query in
                 Task { @MainActor in
-                    self?.performSearch(query: query)
+                    guard let self = self, self.searchQuery == query else { return }
+                    self.performSearch(query: query)
                 }
             }
     }
 
     private func performSearch(query: String) {
-        let trimmed = query.trimmingCharacters(in: .whitespaces)
+        semanticSearchQueue.cancelAllOperations()
+        searchRevision += 1
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
 
         if trimmed.isEmpty {
             isSearching = false
@@ -120,28 +129,39 @@ final class ClipListViewModel: ObservableObject {
     /// AI-powered semantic search via local NLEmbedding vectors.
     private func performSemanticSearch(query: String) {
         isSemanticSearching = true
-
-        Task {
-            do {
-                // Fetch up to 1000 recent clips to search against natively
+        let revision = searchRevision
+        let repository = repository
+        let operation = BlockOperation()
+        operation.addExecutionBlock { [weak self, weak operation] in
+            guard let operation = operation, !operation.isCancelled else { return }
+            let result = Result {
                 let searchableClips = try repository.recentClips(limit: 1000)
-                let matchedClips = EmbeddingService.shared.findSimilar(
+                return EmbeddingService.shared.findSimilar(
                     to: query,
                     in: searchableClips,
                     threshold: 0.45
                 )
-
-                if matchedClips.isEmpty {
-                    performTextSearch(query: query)
-                } else {
-                    clips = matchedClips
-                    isSemanticSearching = false
+            }
+            guard !operation.isCancelled else { return }
+            Task { @MainActor [weak self] in
+                guard let self = self,
+                      self.searchRevision == revision,
+                      self.searchMode == .semantic,
+                      self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines) == query
+                else { return }
+                switch result {
+                case .success(let matches) where !matches.isEmpty:
+                    self.clips = matches
+                    self.isSemanticSearching = false
+                case .success:
+                    self.performTextSearch(query: query)
+                case .failure(let error):
+                    print("ClipListViewModel: Semantic search error: \(error)")
+                    self.performTextSearch(query: query)
                 }
-            } catch {
-                print("ClipListViewModel: Semantic search error: \(error)")
-                performTextSearch(query: query)
             }
         }
+        semanticSearchQueue.addOperation(operation)
     }
 
     // MARK: - Search Mode Toggle

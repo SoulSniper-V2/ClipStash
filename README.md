@@ -10,7 +10,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Platform-macOS%2014%2B-blue?style=flat-square&logo=apple" alt="macOS 14+"/>
-  <img src="https://img.shields.io/badge/Swift-5.9-orange?style=flat-square&logo=swift" alt="Swift 5.9"/>
+  <img src="https://img.shields.io/badge/Swift-6.1%2B-orange?style=flat-square&logo=swift" alt="Swift 6.1+"/>
   <img src="https://img.shields.io/badge/UI-SwiftUI-purple?style=flat-square" alt="SwiftUI"/>
   <img src="https://img.shields.io/badge/DB-SQLite%20%2B%20FTS5-green?style=flat-square" alt="SQLite"/>
   <img src="https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square" alt="MIT License"/>
@@ -54,7 +54,7 @@ Built for developers and power users who copy dozens of things a day and lose ha
 │  │   + FTS5)   │    │  text search)  │  │
 │  └─────────────┘    └───────┬────────┘  │
 └──────────────────────────────┼──────────┘
-                               │ shell out
+                               │ on-device
                                ▼
                     ┌─────────────────────┐
                     │ Apple NLEmbedding   │
@@ -66,7 +66,7 @@ Built for developers and power users who copy dozens of things a day and lose ha
 ## 📦 Requirements
 
 - **macOS 14.0** (Sonoma) or later
-- **Xcode 16+** or Swift 5.9+ toolchain
+- **Xcode 16.3+** (Swift 6.1 or later) on macOS; the app remains in Swift 5 language mode
 - [GRDB.swift](https://github.com/groue/GRDB.swift) (resolved automatically via SPM)
 
 ## 🚀 Getting Started
@@ -84,7 +84,7 @@ brew install --cask soulsniper-v2/tap/clipstash
 ```bash
 git clone https://github.com/SoulSniper-V2/ClipStash.git
 cd ClipStash
-swift build
+swift build --jobs 2
 ```
 
 ### Run in Xcode
@@ -97,10 +97,23 @@ open ClipStash.xcodeproj
 ### Run from Terminal
 
 ```bash
-swift run
+swift run ClipStash
 ```
 
-> **Note:** For the full menu-bar-only experience (no Dock icon), build and run via Xcode. The `swift run` binary doesn't have the `LSUIElement` Info.plist flag embedded.
+> **Note:** Both entry points set the app to accessory mode. Use the Xcode app bundle for Launch at Login and distribution; `swift run` is a development executable. SwiftPM copies the existing catalog into its resource bundle and loads its logo images directly, while Xcode compiles the full asset catalog.
+
+### Validate a source build
+
+```bash
+swift test --jobs 2
+xcodebuild -project ClipStash.xcodeproj -scheme ClipStash \
+  -configuration Release -destination 'platform=macOS' \
+  -derivedDataPath build -jobs 2 CODE_SIGNING_ALLOWED=NO build
+```
+
+The unsigned app is at `build/Build/Products/Release/ClipStash.app`. For a signed build, select your own development team in Xcode. The checked-in project and `project.yml` describe the same sources and assets; if you use XcodeGen, regenerate with `xcodegen generate` after changing the specification.
+
+GitHub Actions runs the SwiftPM regression tests and unsigned Debug/Release Xcode builds on macOS 26 with Xcode 26.6, and checks that the app contains its compiled assets. Tests use isolated in-memory databases. They do not exercise the system clipboard, Accessibility permissions, Launch at Login, or the visible UI; smoke-test those on a Mac before a release.
 
 ## ⌨️ Usage
 
@@ -112,6 +125,8 @@ swift run
 | Copy selected clip | `↵` Enter |
 | Close popover | `Esc` |
 | Pin / Delete clip | Right-click context menu |
+
+> The current global keyboard monitor requires Accessibility permission for ClipStash under **System Settings → Privacy & Security → Accessibility**. Its global shortcut can also reach the foreground app. The menu bar button works independently of that permission.
 
 ## ⚙️ Settings
 
@@ -153,7 +168,7 @@ Sources/
 
 ## 🔒 Privacy
 
-By default, ClipStash captures content identically from all applications. However, if you'd like to disable capturing from password managers, you can easily toggle this off in the Settings. When disabled, the following apps are actively ignored:
+By default, ClipStash captures content identically from all applications. However, if you'd like to disable capturing from password managers, you can easily toggle this off in the Settings. When disabled, ClipStash skips a capture if one of the following apps is frontmost at the polling tick:
 
 - 1Password (`com.1password.1password`, `com.agilebits.onepassword7`)
 - LastPass (`com.lastpass.LastPass`)
@@ -162,6 +177,8 @@ By default, ClipStash captures content identically from all applications. Howeve
 - KeePassXC (`org.keepassxc.keepassxc`)
 - macOS Keychain Access (`com.apple.keychainaccess`)
 - Enpass (`in.sinew.Enpass-Desktop`)
+
+This check uses the foreground app, not a guaranteed clipboard producer identity. Switching apps before the next polling tick, or copying through a browser extension, can bypass it. Do not rely on this setting to exclude every sensitive copy.
 
 All data is stored locally in `~/Library/Application Support/ClipStash/history.db`. Nothing leaves your machine.
 

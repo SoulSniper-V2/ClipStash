@@ -9,6 +9,8 @@ final class EmbeddingService {
     /// Singleton instance.
     static let shared = EmbeddingService()
 
+    private let modelQueue = DispatchQueue(label: "com.clipstash.embedding")
+
     /// The local pre-trained model for sentence embeddings.
     /// Loaded eagerly to avoid lazy loading lag on first search.
     private let localModel = NLEmbedding.sentenceEmbedding(for: .english)
@@ -20,6 +22,11 @@ final class EmbeddingService {
     /// Embed text locally using NLEmbedding.
     /// Available offline, runs entirely on-device (macOS 14+).
     func embedLocally(_ text: String) -> [Float]? {
+        // Capture processing and search share one NLEmbedding instance.
+        modelQueue.sync { embedText(text) }
+    }
+
+    private func embedText(_ text: String) -> [Float]? {
         guard let model = localModel else { return nil }
         
         // Truncate text before embedding (NLEmbedding performs poorly on massive text blocks)

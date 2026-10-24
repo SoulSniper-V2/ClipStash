@@ -15,7 +15,7 @@ final class AppDatabase {
         }
     }()
 
-    private init() throws {
+    private convenience init() throws {
         // Create the Application Support directory if needed
         let fileManager = FileManager.default
         let appSupportURL = try fileManager.url(
@@ -37,9 +37,12 @@ final class AppDatabase {
         }
         #endif
 
-        dbQueue = try DatabaseQueue(path: dbURL.path, configuration: config)
+        try self.init(dbQueue: DatabaseQueue(path: dbURL.path, configuration: config))
+    }
 
-        // Run migrations
+    /// Uses the same migrations for persistent history and isolated test databases.
+    init(dbQueue: DatabaseQueue) throws {
+        self.dbQueue = dbQueue
         try migrator.migrate(dbQueue)
     }
 
@@ -47,11 +50,6 @@ final class AppDatabase {
 
     private var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
-
-        #if DEBUG
-        // Wipe DB on schema change during development
-        migrator.eraseDatabaseOnSchemaChange = true
-        #endif
 
         // v1: Core clips table
         migrator.registerMigration("v1_createClipItem") { db in

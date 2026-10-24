@@ -51,7 +51,7 @@ final class ClipRepository {
 
     /// Full-text search using FTS5.
     func search(query: String) throws -> [ClipItem] {
-        guard !query.trimmingCharacters(in: .whitespaces).isEmpty else {
+        guard !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return try recentClips()
         }
 
@@ -72,10 +72,14 @@ final class ClipRepository {
                 }
             }
 
-            // Fallback: LIKE search
-            let likePattern = "%\(query)%"
+            // Clipboard punctuation is literal text, not a LIKE wildcard.
+            let escapedQuery = query
+                .replacingOccurrences(of: "\\", with: "\\\\")
+                .replacingOccurrences(of: "%", with: "\\%")
+                .replacingOccurrences(of: "_", with: "\\_")
+            let likePattern = "%\(escapedQuery)%"
             return try ClipItem
-                .filter(ClipItem.Columns.content.like(likePattern))
+                .filter(sql: "content LIKE ? ESCAPE '\\'", arguments: [likePattern])
                 .order(
                     ClipItem.Columns.isPinned.desc,
                     ClipItem.Columns.timestamp.desc
@@ -87,7 +91,7 @@ final class ClipRepository {
 
     /// Search using raw FTS5 SQL for reliability.
     func ftsSearch(query: String) throws -> [ClipItem] {
-        guard !query.trimmingCharacters(in: .whitespaces).isEmpty else {
+        guard !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return try recentClips()
         }
 
@@ -147,17 +151,29 @@ final class ClipRepository {
 
     // MARK: - Observation
 
-    /// Live observation of recent clips for SwiftUI.
-    func recentClipsObservation(limit: Int = 50) -> ValueObservation<ValueReducers.Fetch<[ClipItem]>> {
-        ValueObservation.tracking { db in
-            try ClipItem
+    struct HistorySnapshot: Sendable {
+        let clips: [ClipItem]
+        let totalCount: Int
+    }
+
+    /// Observe this repository's database, including changes outside the visible page.
+    @MainActor
+    func observeHistory(
+        limit: Int = 100,
+        onError: @escaping @MainActor (Error) -> Void,
+        onChange: @escaping @MainActor (HistorySnapshot) -> Void
+    ) -> AnyDatabaseCancellable {
+        let observation = ValueObservation.tracking { db in
+            let clips = try ClipItem
                 .order(
                     ClipItem.Columns.isPinned.desc,
                     ClipItem.Columns.timestamp.desc
                 )
                 .limit(limit)
                 .fetchAll(db)
+            return HistorySnapshot(clips: clips, totalCount: try ClipItem.fetchCount(db))
         }
+        return observation.start(in: db.dbQueue, onError: onError, onChange: onChange)
     }
 
     /// Total clip count.

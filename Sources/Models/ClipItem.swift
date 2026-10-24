@@ -2,7 +2,7 @@ import Foundation
 import GRDB
 
 /// A single clipboard history entry stored in SQLite.
-struct ClipItem: Codable, Identifiable, Equatable, Hashable {
+struct ClipItem: Codable, Identifiable, Equatable, Hashable, Sendable {
     /// Auto-incremented row ID.
     var id: Int64?
     /// The clipboard text content.
@@ -62,7 +62,7 @@ struct ClipItem: Codable, Identifiable, Equatable, Hashable {
 
 // MARK: - GRDB Record Conformance
 
-extension ClipItem: FetchableRecord, PersistableRecord {
+extension ClipItem: FetchableRecord, MutablePersistableRecord {
     static let databaseTableName = "clipItem"
 
     /// Define the columns for type-safe queries.

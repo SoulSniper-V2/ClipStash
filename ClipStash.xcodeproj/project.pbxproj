@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E4A6D199D5FEB27D7E06EE6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51A13881229563752F12046B /* Assets.xcassets */; };
+		5CFD17FF6D9564A298CDA0AA /* AppResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0CCF8F24086F5B7E3BF64A /* AppResources.swift */; };
 		02181C936B25E857BA13FB1A /* ClipStashApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16A6D7E5AE29D2B7068A40C /* ClipStashApp.swift */; };
 		03D168CFE26063E1423EE44F /* ClipRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA570DC616D3BC2D68CBC81 /* ClipRepository.swift */; };
 		0AEBD56984EFD581E297F016 /* HistoryRetentionPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C68C82161306EE202D1B031 /* HistoryRetentionPolicy.swift */; };
@@ -33,6 +35,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		51A13881229563752F12046B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
+		5D0CCF8F24086F5B7E3BF64A /* AppResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppResources.swift; sourceTree = "<group>"; };
 		0253C6C97784AA7B4A3FC2F4 /* NSRunningApplication+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRunningApplication+Ext.swift"; sourceTree = "<group>"; };
 		0665A2A48823331B3DEAEF83 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		18C8DDB1CCE6FFF68D05088C /* EmbeddingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddingService.swift; sourceTree = "<group>"; };
@@ -139,6 +143,7 @@
 		A9101E7403822AE48722F432 = {
 			isa = PBXGroup;
 			children = (
+				51A13881229563752F12046B /* Assets.xcassets */,
 				5DA15891A57A4B8C5ABA42D3 /* Sources */,
 				7332244E825E009877005BCC /* Products */,
 			);
@@ -164,6 +169,7 @@
 		EE6DF4075F19CF0C5889BAAF /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				5D0CCF8F24086F5B7E3BF64A /* AppResources.swift */,
 				BBF14A5B5265665260F7EF97 /* DateFormatter+Ext.swift */,
 				0253C6C97784AA7B4A3FC2F4 /* NSRunningApplication+Ext.swift */,
 				564E4ED567E8B657E3371936 /* String+Ext.swift */,
@@ -180,6 +186,7 @@
 			buildPhases = (
 				000D3527B1874DD0F0BD6BD2 /* Sources */,
 				B2A2A5A738F743DD572B3466 /* Frameworks */,
+				C9BF759BD3CC67C9D3412531 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -200,7 +207,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					1B0F9AE68C248589D2B42A10 = {
 						DevelopmentTeam = Y67PXRT5DY;
@@ -230,11 +237,23 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		C9BF759BD3CC67C9D3412531 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4A6D199D5FEB27D7E06EE6D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		000D3527B1874DD0F0BD6BD2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CFD17FF6D9564A298CDA0AA /* AppResources.swift in Sources */,
 				17F3B7C6A1AA5E82EA68A1BA /* AppDatabase.swift in Sources */,
 				FD444D283F0CDC8D8F464E31 /* AppDelegate.swift in Sources */,
 				D2C8605AD8B383DB0F568551 /* BackgroundProcessor.swift in Sources */,
@@ -266,6 +285,7 @@
 		8F4B1D3AB76A82D09C338EB0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -348,6 +368,7 @@
 		B9D0E08E707E2BDAEF820335 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -460,10 +481,10 @@
 /* Begin XCRemoteSwiftPackageReference section */
 		5EC9731FD7283B30185F4137 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/groue/GRDB.swift";
+			repositoryURL = "https://github.com/groue/GRDB.swift.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 7.0.0;
+				minimumVersion = 7.11.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

@@ -11,7 +11,6 @@ final class BackgroundProcessor {
     private var timer: Timer?
     private let batchSize = 10
     private let interval: TimeInterval = 30
-    private var isProcessing = false
 
     init(repository: ClipRepository = ClipRepository()) {
         self.repository = repository
@@ -48,12 +47,8 @@ final class BackgroundProcessor {
     // MARK: - Private
 
     private func processBacklog() {
-        guard !isProcessing else { return }
-        isProcessing = true
-        
         queue.async { [weak self] in
             guard let self = self else { return }
-            defer { self.isProcessing = false }
 
             do {
                 self.pruneExpiredClipsIfNeeded()

@@ -3,14 +3,14 @@ options:
   bundleIdPrefix: com.clipstash
   deploymentTarget:
     macOS: "14.0"
-  xcodeVersion: "16.0"
+  xcodeVersion: "16.3"
   createIntermediateGroups: true
   generateEmptyDirectories: true
 
 packages:
   GRDB:
-    url: https://github.com/groue/GRDB.swift
-    from: "7.0.0"
+    url: https://github.com/groue/GRDB.swift.git
+    from: "7.11.1"
 
 targets:
   ClipStash:
@@ -18,12 +18,13 @@ targets:
     platform: macOS
     sources:
       - path: Sources
-    resources:
       - path: Resources
+        buildPhase: resources
     dependencies:
       - package: GRDB
     settings:
       base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         PRODUCT_NAME: ClipStash
         PRODUCT_BUNDLE_IDENTIFIER: com.clipstash.app
         MARKETING_VERSION: 2.3.0
@@ -37,3 +38,13 @@ targets:
         CODE_SIGN_STYLE: Automatic
         ENABLE_HARDENED_RUNTIME: YES
         SWIFT_STRICT_CONCURRENCY: minimal
+
+schemes:
+  ClipStash:
+    build:
+      targets:
+        ClipStash: all
+    run:
+      config: Debug
+    archive:
+      config: Release
